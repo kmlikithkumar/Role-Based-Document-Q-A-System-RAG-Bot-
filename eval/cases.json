@@ -1,0 +1,123 @@
+[
+ {
+  "role": "hr",
+  "q": "How many days of annual leave do employees get?",
+  "expect_file": "leave_policy.md",
+  "keywords": [
+   "24"
+  ]
+ },
+ {
+  "role": "hr",
+  "q": "What bonus does a rating of 4 qualify for?",
+  "expect_file": "leave_policy.md",
+  "keywords": [
+   "15"
+  ]
+ },
+ {
+  "role": "engineer",
+  "q": "When can we deploy to production?",
+  "expect_file": "deploy_runbook.md",
+  "keywords": [
+   "tuesday",
+   "thursday"
+  ]
+ },
+ {
+  "role": "engineer",
+  "q": "What happens if the canary error rate is too high?",
+  "expect_file": "deploy_runbook.md",
+  "keywords": [
+   "roll"
+  ]
+ },
+ {
+  "role": "employee",
+  "q": "How many days can I work from home?",
+  "expect_file": "company_overview.md",
+  "keywords": [
+   "three"
+  ]
+ },
+ {
+  "role": "employee",
+  "q": "How many days of annual leave do employees get?",
+  "forbid_file": "leave_policy.md"
+ },
+ {
+  "role": "employee",
+  "q": "When can we deploy to production?",
+  "forbid_file": "deploy_runbook.md"
+ },
+ {
+  "role": "engineer",
+  "q": "What is the paternity leave policy?",
+  "forbid_file": "leave_policy.md"
+ },
+ {
+  "role": "hr",
+  "q": "What is the production database credentials policy?",
+  "forbid_file": "deploy_runbook.md"
+ },
+ {
+  "role": "hr",
+  "q": "How long is maternity leave and is it paid?",
+  "expect_file": "leave_policy.md"
+ },
+ {
+  "role": "hr",
+  "q": "When do salary reviews happen?",
+  "expect_file": "leave_policy.md"
+ },
+ {
+  "role": "hr",
+  "q": "How many sick days do I get and when do I need a certificate?",
+  "expect_file": "leave_policy.md"
+ },
+ {
+  "role": "engineer",
+  "q": "Who is on call and when does the rotation change?",
+  "expect_file": "deploy_runbook.md"
+ },
+ {
+  "role": "engineer",
+  "q": "Where are production database credentials kept?",
+  "expect_file": "deploy_runbook.md"
+ },
+ {
+  "role": "engineer",
+  "q": "How soon must a post-incident review be done?",
+  "expect_file": "deploy_runbook.md"
+ },
+ {
+  "role": "employee",
+  "q": "Where do I get IT help and how often are laptops replaced?",
+  "expect_file": "company_overview.md"
+ },
+ {
+  "role": "employee",
+  "q": "What are the core working hours?",
+  "expect_file": "company_overview.md"
+ },
+ {
+  "role": "employee",
+  "q": "How many company holidays are there each year?",
+  "expect_file": "company_overview.md"
+ },
+ {
+  "role": "employee",
+  "q": "What is the bonus for a rating of 5?",
+  "forbid_file": "leave_policy.md"
+ },
+ {
+  "role": "employee",
+  "q": "What is the rollback procedure for a bad release?",
+  "forbid_file": "deploy_runbook.md"
+ },
+ {
+  "role": "engineer",
+  "q": "How are salary bands decided?",
+  "forbid_file": "leave_policy.md"
+ }
+]

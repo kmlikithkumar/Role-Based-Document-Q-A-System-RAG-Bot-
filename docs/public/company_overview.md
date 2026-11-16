@@ -1,0 +1,2 @@
+# Northwind Labs overview
+Northwind Labs is a 120-person software company headquartered in Bengaluru with a small office in Pune. Core working hours are 10:00 to 17:00 IST. Employees may work from home up to three days a week. The office is open Monday to Friday, and the cafeteria serves lunch from 12:30 to 14:00. For IT support, raise a ticket on the helpdesk portal or email helpdesk@northwind.example. Laptops are refreshed every three years. Company holidays are published each December on the intranet calendar, and there are 12 per year.

@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script>document.documentElement.dataset.theme=localStorage.theme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Northwind Docs Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F6F7FB;--surface:#FFFFFF;--surface2:#F1F4FA;--line:#DDE3EE;--ink:#0F172A;--mute:#5B6B82;--primary:#4F46E5;--primary-h:#4338CA;--on-primary:#FFFFFF;--tint:#EEF2FF;--teal:#0F9F8F;--ok:#15803D;--warn:#B45309;--danger:#DC2626;--public:#15803D;--hr:#9D3F8B;--engineering:#B45309;--shadow:0 1px 2px rgba(15,23,42,.05),0 10px 30px rgba(15,23,42,.07);--ring:0 0 0 3px rgba(79,70,229,.30);--hero:linear-gradient(135deg,#EEF2FF 0%,#E6FAF7 100%);color-scheme:light}
+[data-theme=dark]{--bg:#0B1020;--surface:#121A33;--surface2:#18223F;--line:#243055;--ink:#E5E9F5;--mute:#9AA7C2;--primary:#818CF8;--primary-h:#A5B4FC;--on-primary:#0B1020;--tint:#1B2350;--ok:#4ADE80;--warn:#FBBF24;--danger:#F87171;--public:#4ADE80;--hr:#E879F9;--engineering:#FBBF24;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.28);--ring:0 0 0 3px rgba(129,140,248,.4);--hero:linear-gradient(135deg,#141C3D 0%,#0F2A3A 100%);color-scheme:dark}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;font:16px/1.6 Inter,"Noto Sans Kannada",system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+body:before{content:"";position:fixed;inset:0 0 auto 0;height:340px;background:var(--hero);z-index:-1;-webkit-mask-image:linear-gradient(#000 55%,transparent);mask-image:linear-gradient(#000 55%,transparent)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:none;box-shadow:var(--ring)}
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:10px 20px;background:color-mix(in srgb,var(--surface) 82%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em}
+.logo{width:28px;height:28px;border-radius:9px;background:linear-gradient(135deg,var(--primary),var(--teal))}
+.wrap{max-width:900px;margin:0 auto;padding:28px 16px 140px}
+.hero{padding:36px 8px 8px;text-align:center}
+h1{font-size:clamp(1.6rem,4vw,2.3rem);line-height:1.15;margin:0 0 8px;letter-spacing:-.02em}
+.sub{color:var(--mute);margin:0 0 22px;font-size:1.05rem}
+body.in .hero{display:none}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:var(--shadow)}
+#login,#forgot,#reset,#mfa{max-width:520px;margin:0 auto}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+input,select,textarea{padding:11px 13px;border:1px solid var(--line);border-radius:10px;background:var(--surface);flex:1;min-width:140px;transition:border-color .15s,box-shadow .15s}
+input:hover,select:hover,textarea:hover{border-color:var(--mute)}
+input:focus,select:focus,textarea:focus{border-color:var(--primary)}
+input:disabled{background:var(--surface2);color:var(--mute);cursor:not-allowed}
+textarea{resize:vertical;width:100%}
+[aria-invalid=true]{border-color:var(--danger)}
+button{padding:10px 16px;border:1px solid transparent;border-radius:10px;background:var(--primary);color:var(--on-primary);font-weight:600;cursor:pointer;transition:background .15s,transform .1s}
+button:hover:not(:disabled){background:var(--primary-h)}
+button:active:not(:disabled){transform:translateY(1px)}
+button:disabled{opacity:.5;cursor:not-allowed}
+button.ghost,button.icon{background:transparent;color:var(--ink);border-color:var(--line)}
+button.ghost:hover:not(:disabled),button.icon:hover:not(:disabled){background:var(--surface2)}
+button.danger{background:var(--danger);color:var(--on-primary)}button.danger:hover:not(:disabled){background:var(--danger);filter:brightness(.92)}
+button.icon{padding:8px 12px}
+button.avatar,.avatar{width:38px;height:38px;border-radius:50%;padding:0;overflow:hidden;background:var(--tint);color:var(--primary);display:grid;place-items:center;font-weight:700;border:2px solid var(--surface);box-shadow:0 0 0 1px var(--line);flex:none}
+button.avatar:focus-visible{box-shadow:var(--ring)}
+button.avatar:hover:not(:disabled){background:var(--tint);box-shadow:0 0 0 2px var(--primary)}
+.avatar img{width:100%;height:100%;object-fit:cover;display:block}.avatar.big{width:84px;height:84px;font-size:1.8rem}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 16px;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);margin-bottom:14px}
+#chats{flex:0 1 220px;min-width:120px}
+.tag{display:inline-block;padding:2px 10px;border-radius:99px;font-size:.78rem;font-weight:700;color:var(--on-primary);margin-right:6px}
+.tag.public{background:var(--public)}.tag.hr{background:var(--hr)}.tag.engineering{background:var(--engineering)}
+.msg{margin:22px 0;display:flex;flex-direction:column;gap:10px}
+.q{align-self:flex-end;max-width:85%;background:var(--primary);color:var(--on-primary);padding:10px 16px;border-radius:16px 16px 4px 16px;font-weight:500}
+.a{white-space:pre-wrap;background:var(--surface);border:1px solid var(--line);border-radius:16px 16px 16px 4px;padding:14px 18px;box-shadow:var(--shadow)}
+.srcs{display:grid;gap:8px}
+.src{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--primary);border-radius:10px;padding:10px 14px;font-size:.88rem;color:var(--mute)}
+.src b{color:var(--ink)}.src button{margin-top:8px;padding:5px 12px;font-size:.85rem}
+.ask{position:fixed;left:0;right:0;bottom:0;padding:18px 16px 16px;background:linear-gradient(to top,var(--bg) 60%,transparent)}
+.ask .row{max-width:900px;margin:0 auto;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:8px;box-shadow:var(--shadow);flex-wrap:nowrap}
+.ask input{border:0;background:transparent}.ask input:focus{box-shadow:none}.ask .row:focus-within{box-shadow:var(--ring);border-color:var(--primary)}
+.err{color:var(--danger);margin:8px 0 0}.ok{color:var(--ok);margin:8px 0 0}
+.hint{color:var(--mute);font-size:.92rem;margin-top:12px}
+.hint button+button{margin-left:14px}
+.hint button{background:none;color:var(--primary);padding:0 2px;font-weight:600;text-decoration:underline;border:0}
+#starters button{background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:6px 14px;text-decoration:none;color:var(--ink);font-weight:500;margin:4px 6px 0 0}
+#starters button:hover{border-color:var(--primary);background:var(--tint)}
+details{margin-bottom:12px}summary{cursor:pointer;color:var(--primary);font-weight:600;padding:8px 2px}details>.card{margin-top:6px}
+details h2{font-size:1rem;margin:0 0 8px}
+.item{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--line);font-size:.92rem}
+.item button{padding:5px 11px;font-size:.85rem}.item button:not(.danger){background:var(--tint);color:var(--primary)}
+body[data-view=profile] #chat>.bar,body[data-view=profile] #chat>details{display:none}
+.muted{color:var(--mute)}code{background:var(--surface2);padding:2px 6px;border-radius:6px;overflow-wrap:anywhere}
+.phead{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.pmeta{flex:1;min-width:180px}.pmeta h2{margin:0;font-size:1.4rem}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px 24px;margin:0}
+.pgrid dt{font-size:.78rem;color:var(--mute);font-weight:600;text-transform:uppercase;letter-spacing:.05em}.pgrid dd{margin:2px 0 0;overflow-wrap:anywhere}
+.field{display:flex;flex-direction:column;gap:6px}.field.wide{grid-column:1/-1}
+.field label{font-weight:600;font-size:.9rem;display:flex;align-items:center;gap:6px}.field input,.field select,.field textarea{flex:none;width:100%}
+.ferr{color:var(--danger);font-size:.85rem}.hintline{color:var(--mute);font-size:.82rem}
+#toasts{position:fixed;top:70px;right:16px;z-index:50;display:grid;gap:8px;max-width:calc(100vw - 32px)}
+.toast{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--ok);border-radius:10px;padding:10px 16px;box-shadow:var(--shadow);animation:pop .2s ease-out}.toast.err{border-left-color:var(--danger)}
+.skel{height:18px;border-radius:8px;background:linear-gradient(90deg,var(--surface2),var(--line),var(--surface2));background-size:200% 100%;animation:sh 1.2s infinite}
+@keyframes pop{from{opacity:0;transform:translateY(-6px)}}@keyframes sh{to{background-position:-200% 0}}
+@media(max-width:640px){.pgrid{grid-template-columns:1fr}.q{max-width:95%}.wrap{padding-top:16px}.top{padding:10px 14px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="logo" aria-hidden="true"></span>Northwind Docs</div>
+  <div class="row">
+    <button class="icon" id="themebtn" type="button" aria-label="Switch between light and dark theme" title="Switch theme">&#9680;</button>
+    <button class="avatar" id="avatarbtn" type="button" aria-label="My profile" title="My profile" hidden>?</button>
+  </div>
+</header>
+<div class="wrap">
+  <div class="hero"><h1>Ask your documents anything</h1>
+  <p class="sub">Answers come only from documents your role is allowed to read.</p></div>
+  <form id="login" class="card">
+    <div class="row">
+      <input id="u" placeholder="Username" autocomplete="username" aria-label="Username" required>
+      <input id="p" type="password" placeholder="Password" autocomplete="current-password" aria-label="Password" required>
+      <button>Sign in</button>
+    </div>
+    <div id="lerr" class="err"></div>
+    <div class="hint"><button type="button" id="forgotlink">Forgot password?</button> <button type="button" id="ssobtn" hidden>Sign in with SSO</button></div>
+  </form>
+  <form id="forgot" class="card" hidden>
+    <div class="row"><input id="fi" placeholder="Username or email" aria-label="Username or email" required><button>Send reset link</button><button type="button" class="ghost" id="fback">Back</button></div>
+    <div id="fmsg"></div>
+  </form>
+  <form id="reset" class="card" hidden>
+    <div class="row"><input id="rpw" type="password" placeholder="New password (8+ characters)" autocomplete="new-password" required aria-label="New password"><button>Set password</button></div>
+    <div id="rmsg"></div>
+  </form>
+  <form id="mfa" class="card" hidden>
+    <div class="row"><input id="mc" inputmode="numeric" autocomplete="one-time-code" placeholder="6-digit code from your authenticator app" required aria-label="Authenticator code"><button>Verify</button></div>
+    <div id="mmsg"></div>
+  </form>
+  <div id="chat" hidden>
+    <div class="bar">
+      <div><span id="who"></span> can read: <span id="access"></span></div>
+      <div class="row">
+        <select id="chats" aria-label="Saved chats"></select>
+        <button class="ghost" id="new">New chat</button><button class="ghost" id="delchat">Delete chat</button>
+        <button class="ghost" id="out">Sign out</button>
+      </div>
+    </div>
+    <details id="acct"><summary>My account</summary><div class="card">
+      <div id="acctinfo" class="muted"></div>
+      <form id="emailform" class="row" style="margin-top:10px"><input id="me_email" type="email" placeholder="Email address" required aria-label="Email address"><button>Save and verify</button></form>
+      <h2 style="margin:18px 0 8px">Two-factor authentication</h2>
+      <div id="tfa"></div><div id="tmsg"></div></div></details>
+    <details><summary>My password</summary><div class="card">
+      <form id="pwform" class="row">
+        <input id="po" type="password" placeholder="Current password" autocomplete="current-password" required aria-label="Current password">
+        <input id="pn" type="password" placeholder="New password (8+ characters)" autocomplete="new-password" required aria-label="New password">
+        <button>Change</button></form><div id="pmsg"></div></div></details>
+    <details id="admin" hidden><summary>Admin: documents and users</summary><div class="card">
+      <h2>Documents</h2><div id="docs" class="list"></div>
+      <form id="upform" class="row" style="margin-top:10px">
+        <select id="uptag" aria-label="Folder"><option>public</option><option>hr</option><option>engineering</option></select>
+        <input id="upfile" type="file" accept=".pdf,.md,.txt,.png,.jpg,.jpeg,.webp,.tif,.tiff" required aria-label="File"><button>Upload</button></form>
+      <h2 style="margin-top:18px">Users</h2><div id="users" class="list"></div>
+      <form id="userform" class="row" style="margin-top:10px">
+        <input id="nu" placeholder="Username" required aria-label="New username">
+        <input id="ne" type="email" placeholder="Email (optional)" aria-label="Email">
+        <input id="np" type="password" placeholder="Password (8+ characters)" required aria-label="New password">
+        <select id="nr" aria-label="Role"><option>employee</option><option>engineer</option><option>hr</option><option>admin</option></select>
+        <button>Add user</button></form>
+      <h2 style="margin-top:18px">Backups</h2><div id="backups" class="list"></div>
+      <div class="row" style="margin-top:10px"><button id="bknow" type="button">Back up now</button></div>
+      <h2 style="margin-top:18px">Audit log</h2>
+      <div class="row"><input id="auditq" placeholder="Filter by username" aria-label="Filter audit log by username"><button id="auditgo" type="button">Show</button></div>
+      <div id="audit" class="list"></div>
+      <button id="auditmore" type="button" class="ghost" hidden>Load more</button>
+      <div id="amsg"></div></div></details>
+    <section id="convo"><div id="log"></div>
+    <div id="starters" class="hint"></div></section>
+    <section id="profilepane" class="card" hidden aria-labelledby="ptitle">
+      <div class="phead">
+        <div class="avatar big" id="pavatar" aria-hidden="true">?</div>
+        <div class="pmeta"><h2 id="ptitle">My profile</h2><div id="psub" class="muted"></div></div>
+        <div class="row"><button class="ghost" id="pback" type="button">Back to chat</button><button id="pedit" type="button">Edit profile</button></div>
+      </div>
+      <dl id="pview" class="pgrid"></dl>
+      <form id="pform" hidden novalidate>
+        <div class="pgrid" id="pfields"></div>
+        <div class="field wide" style="margin-top:16px"><label for="pfile">Photo</label>
+          <div class="row"><input id="pfile" type="file" accept="image/png,image/jpeg,image/webp"><button type="button" id="photosave" hidden>Upload photo</button><button type="button" class="ghost" id="photodel">Remove photo</button></div>
+          <div class="hintline">Pick a picture. It is cropped to a square and shrunk before upload.</div></div>
+        <div class="row" style="margin-top:16px"><button id="psave" disabled>Save changes</button><button type="button" class="ghost" id="pcancel">Cancel</button></div>
+      </form>
+    </section>
+  </div>
+</div>
+<form class="ask" id="askbar" hidden>
+  <div class="row"><input id="q" placeholder="Ask about your documents" autocomplete="off" aria-label="Question"><button id="send">Ask</button></div>
+</form>
+<div id="toasts" aria-live="polite"></div>
+<script>
+const $=id=>document.getElementById(id);
+let token=null,chatId=null;
+const STARTERS={hr:["How many days of annual leave do I get?","What is the bonus rule?"],
+engineer:["When can we deploy to production?","What happens if the canary error rate is high?"],
+employee:["How many days can I work from home?","When is lunch served?"],
+admin:["How many days of annual leave do I get?","When can we deploy to production?"]};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const tag=t=>`<span class="tag ${esc(t)}">${esc(t)}</span>`;
+const auth=()=>({Authorization:"Bearer "+token});
+const say=(el,t,cls)=>{$(el).innerHTML=`<div class="${cls}">${esc(t)}</div>`};
+async function call(method,path,body){
+  const r=await fetch(path,{method,headers:{...(body?{"Content-Type":"application/json"}:{}),...(token?auth():{})},body:body?JSON.stringify(body):undefined});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok){const e=new Error(typeof j.detail==="string"?j.detail:"Something went wrong.");e.fields=j.errors;throw e}
+  return j;
+}
+function addMsg(q){
+  const m=document.createElement("div");m.className="msg";
+  m.innerHTML=`<div class="q">${esc(q)}</div><div class="a"></div><div class="srcs"></div>`;
+  $("log").append(m);m.scrollIntoView({block:"end"});
+  return {a:m.querySelector(".a"),box:m.querySelector(".srcs")};
+}
+const showSources=(box,s)=>{box.innerHTML=(s||[]).map(x=>`<div class="src">${tag(x.tag)}<b>[${x.n}] ${esc(x.file)}</b> · match ${x.score}<br>${esc(x.snippet)}…<br><button type="button" class="ghost" data-open="1" data-tag="${esc(x.tag)}" data-file="${esc(x.file)}">Open document</button></div>`).join("")};
+async function loadChats(){
+  const l=await call("GET","/api/chats");
+  $("chats").innerHTML='<option value="">Saved chats</option>'+l.map(c=>`<option value="${c.id}">${esc(c.title)}</option>`).join("");
+  $("chats").value=chatId||"";
+}
+const newChat=()=>{chatId=null;$("log").innerHTML="";$("chats").value=""};
+async function refreshAdmin(){
+  const [d,u,b]=await Promise.all([call("GET","/api/docs"),call("GET","/api/users"),call("GET","/api/backups")]);
+  $("docs").innerHTML=d.length?d.map(x=>`<div class="item"><span>${tag(x.tag)}${esc(x.file)} <span class="muted">· ${x.chunks} passages</span></span><span class="row"><button data-hist="1" data-t="${esc(x.tag)}" data-f="${esc(x.file)}">History</button><button class="danger" data-tag="${esc(x.tag)}" data-file="${esc(x.file)}">Delete</button></span></div>`).join(""):'<div class="muted">No documents yet.</div>';
+  $("users").innerHTML=u.map(x=>`<div class="item"><span><b>${esc(x.username)}</b> <span class="muted">${esc(x.role)}${x.email?" · "+esc(x.email)+(x.email_verified?"":" (unverified)"):""}${x.totp_enabled?" · 2FA":""}${x.disabled?" · disabled":""}</span></span><span class="row">
+    <button data-act="toggle" data-u="${esc(x.username)}" data-dis="${x.disabled}">${x.disabled?"Enable":"Disable"}</button>
+    <button data-act="email" data-u="${esc(x.username)}">Email</button>${x.totp_enabled?`<button data-act="reset2fa" data-u="${esc(x.username)}">Reset 2FA</button>`:""}
+    <button data-act="reset" data-u="${esc(x.username)}">Reset password</button>
+    <button class="danger" data-act="del" data-u="${esc(x.username)}">Delete</button></span></div>`).join("");
+  $("backups").innerHTML=b.length?b.map(x=>`<div class="item"><span>${esc(x.name)} <span class="muted">· ${x.kb} KB</span></span><button data-bk="${esc(x.name)}">Download</button></div>`).join(""):'<div class="muted">No backups yet.</div>';
+  loadAudit();
+}
+let auditBefore=null;
+async function loadAudit(more){
+  const q=$("auditq").value.trim();
+  const a=await call("GET","/api/audit?limit=50"+(more&&auditBefore?"&before="+auditBefore:"")+(q?"&actor="+encodeURIComponent(q):""));
+  const rows=a.map(x=>`<div class="item"><span><span class="muted">${new Date(x.ts*1000).toLocaleString()}</span> <b>${esc(x.actor)}</b> ${esc(x.action)} <span class="muted">${esc(x.detail||"")}</span></span></div>`).join("");
+  $("audit").innerHTML=(more?$("audit").innerHTML:"")+(rows||(more?"":'<div class="muted">Nothing logged yet.</div>'));
+  if(a.length)auditBefore=a[a.length-1].id;
+  $("auditmore").hidden=a.length<50;
+}
+async function loadAcct(){
+  const m=await call("GET","/api/me");
+  $("acctinfo").textContent=m.email?`${m.email} · ${m.email_verified?"verified":"not verified yet (check your inbox)"}`:"No email on file.";
+  $("tfa").innerHTML=m.totp_enabled
+    ?`<div class="row"><input id="td_code" placeholder="Current code" aria-label="2FA code"><input id="td_pw" type="password" placeholder="Password" aria-label="Password"><button type="button" id="tdisable" class="danger">Turn off</button></div>`
+    :`<button type="button" id="tsetup">Set up an authenticator app</button>`;
+}
+async function enter(j){
+  token=j.token;
+  $("who").textContent=`${j.user} (${j.role})`;$("access").innerHTML=j.access.map(tag).join("");
+  $("starters").innerHTML="Try: "+STARTERS[j.role].map(s=>`<button type="button" data-q="${esc(s)}">${esc(s)}</button>`).join(" · ");
+  $("admin").hidden=j.role!=="admin";
+  show("");$("chat").hidden=false;$("askbar").hidden=false;document.body.classList.add("in");$("avatarbtn").hidden=false;showView("chat");newChat();
+  await loadChats();loadAcct().catch(()=>{});loadProfile().catch(()=>{});if(j.role==="admin")await refreshAdmin();$("q").focus();
+}
+let mfaToken=null;
+$("login").onsubmit=async e=>{
+  e.preventDefault();
+  try{
+    const j=await call("POST","/api/login",{username:$("u").value.trim(),password:$("p").value});
+    $("p").value="";$("lerr").textContent="";
+    if(j.mfa_required){mfaToken=j.mfa_token;show("mfa");$("mc").focus();return}
+    await enter(j);
+  }catch(err){$("lerr").textContent=err.message}
+};
+$("mfa").onsubmit=async e=>{
+  e.preventDefault();
+  try{const j=await call("POST","/api/login/2fa",{mfa_token:mfaToken,code:$("mc").value.trim()});$("mc").value="";await enter(j)}
+  catch(err){say("mmsg",err.message,"err")}
+};
+$("new").onclick=newChat;
+$("out").onclick=async()=>{try{await call("POST","/api/logout")}catch{}token=null;prof=null;editing=false;newChat();showView("chat");document.body.classList.remove("in");$("avatarbtn").hidden=true;setAvatar(null,"?");$("login").hidden=false;$("chat").hidden=true;$("askbar").hidden=true};
+$("delchat").onclick=async()=>{if(!chatId||!confirm("Delete this chat?"))return;await call("DELETE","/api/chats/"+chatId);newChat();loadChats()};
+$("chats").onchange=async()=>{
+  if(!$("chats").value){newChat();return}
+  chatId=+$("chats").value;$("log").innerHTML="";
+  let cur=null;
+  for(const m of await call("GET","/api/chats/"+chatId)){
+    if(m.role==="user")cur=addMsg(m.content);
+    else if(cur){cur.a.textContent=m.content;showSources(cur.box,m.sources)}
+  }
+};
+$("starters").onclick=e=>{if(e.target.dataset.q){$("q").value=e.target.dataset.q;$("askbar").requestSubmit()}};
+$("pwform").onsubmit=async e=>{
+  e.preventDefault();
+  try{const j=await call("POST","/api/password",{old:$("po").value,new:$("pn").value});
+    token=j.token;$("pwform").reset();say("pmsg","Password changed.","ok")}
+  catch(err){say("pmsg",err.message,"err")}
+};
+$("upform").onsubmit=async e=>{
+  e.preventDefault();
+  const fd=new FormData();fd.append("tag",$("uptag").value);fd.append("file",$("upfile").files[0]);
+  const r=await fetch("/api/upload",{method:"POST",headers:auth(),body:fd});
+  const j=await r.json().catch(()=>({}));
+  if(r.ok){say("amsg",`Indexed ${j.file} into ${j.tag} (${j.chunks} passages).`,"ok");$("upform").reset();refreshAdmin()}
+  else say("amsg",j.detail||"Upload failed.","err");
+};
+$("docs").onclick=async e=>{
+  const hb=e.target.closest("button[data-hist]");
+  if(hb){
+    const t=hb.dataset.t,f=hb.dataset.f,base=`/api/docs/${encodeURIComponent(t)}/${encodeURIComponent(f)}`;
+    try{
+      const v=await call("GET",base+"/versions");
+      hb.closest(".item").querySelector(".vers")?.remove();
+      hb.closest(".item").insertAdjacentHTML("beforeend",`<div class="vers muted" style="flex-basis:100%">${v.length?v.map(x=>`<button data-restore="${esc(x.version)}" data-t="${esc(t)}" data-f="${esc(f)}">Restore ${esc(x.version)}</button>`).join(" "):"No earlier versions."}</div>`);
+    }catch(err){say("amsg",err.message,"err")}
+    return;
+  }
+  const rb=e.target.closest("button[data-restore]");
+  if(rb){
+    if(!confirm(`Restore ${rb.dataset.f} to ${rb.dataset.restore}? The current version is kept in history.`))return;
+    try{await call("POST",`/api/docs/${encodeURIComponent(rb.dataset.t)}/${encodeURIComponent(rb.dataset.f)}/restore`,{version:rb.dataset.restore});say("amsg","Restored.","ok");refreshAdmin()}
+    catch(err){say("amsg",err.message,"err")}
+    return;
+  }
+  const b=e.target.closest("button[data-file]");if(!b||!confirm(`Delete ${b.dataset.file} and its history?`))return;
+  try{await call("DELETE",`/api/docs/${encodeURIComponent(b.dataset.tag)}/${encodeURIComponent(b.dataset.file)}`);refreshAdmin()}
+  catch(err){say("amsg",err.message,"err")}
+};
+$("users").onclick=async e=>{
+  const b=e.target.closest("button[data-act]");if(!b)return;
+  const u=b.dataset.u,url="/api/users/"+encodeURIComponent(u);
+  try{
+    if(b.dataset.act==="del"){if(!confirm(`Delete ${u} and their saved chats?`))return;await call("DELETE",url)}
+    else if(b.dataset.act==="reset2fa"){if(!confirm(`Turn off 2FA for ${u}?`))return;await call("PATCH",url,{reset_2fa:true})}
+    else if(b.dataset.act==="email"){const v=prompt(`Email for ${u} (blank to clear):`);if(v===null)return;await call("PATCH",url,{email:v.trim()})}
+    else if(b.dataset.act==="reset"){const p=prompt(`New password for ${u} (8+ characters):`);if(!p)return;await call("PATCH",url,{password:p});say("amsg",`Password reset for ${u}.`,"ok")}
+    else await call("PATCH",url,{disabled:b.dataset.dis!=="1"});
+    refreshAdmin();
+  }catch(err){say("amsg",err.message,"err")}
+};
+$("userform").onsubmit=async e=>{
+  e.preventDefault();
+  try{await call("POST","/api/users",{username:$("nu").value.trim(),password:$("np").value,role:$("nr").value,email:$("ne").value.trim()||null});
+    say("amsg",`Added ${$("nu").value.trim()}.`,"ok");$("userform").reset();refreshAdmin()}
+  catch(err){say("amsg",err.message,"err")}
+};
+const show=id=>{for(const f of ["login","forgot","reset","mfa"])$(f).hidden=f!==id};
+$("forgotlink").onclick=()=>show("forgot");
+$("fback").onclick=()=>show("login");
+$("forgot").onsubmit=async e=>{e.preventDefault();try{const j=await call("POST","/api/forgot",{identifier:$("fi").value.trim()});say("fmsg",j.message,"ok")}catch(err){say("fmsg",err.message,"err")}};
+$("reset").onsubmit=async e=>{e.preventDefault();try{await call("POST","/api/reset",{token:location.hash.slice(7),password:$("rpw").value});history.replaceState(null,"",location.pathname);say("rmsg","Password set. You can sign in now.","ok");setTimeout(()=>show("login"),1500)}catch(err){say("rmsg",err.message,"err")}};
+const LOCK='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
+const PF=[{k:"full_name",l:"Full name",t:"text",max:80},{k:"department",l:"Department",t:"select"},{k:"semester",l:"Semester",t:"select"},{k:"section",l:"Section",t:"text",max:5},{k:"phone",l:"Phone",t:"tel",max:20,hint:"10 to 15 digits, with or without +91"},{k:"bio",l:"About me",t:"textarea",max:280,hint:"Up to 280 characters"}];
+const RO=[["username","Username"],["email","Email"],["role","Role"]];
+const V={full_name:v=>v&&v.length<2?"Enter at least 2 characters.":"",section:v=>v&&!/^[A-Za-z0-9]{1,5}$/.test(v)?"Use up to 5 letters or digits.":"",
+  phone:v=>v&&!/^\+?\d{10,15}$/.test(v.replace(/[\s\-()]/g,""))?"Enter a valid phone number (10 to 15 digits).":"",bio:v=>v.length>280?"Keep it under 280 characters.":""};
+let prof=null,editing=false,pendingPhoto=null;
+function toast(msg,kind){const t=document.createElement("div");t.className="toast"+(kind==="err"?" err":"");t.textContent=msg;$("toasts").append(t);setTimeout(()=>t.remove(),4500)}
+function showView(v){document.body.dataset.view=v;$("convo").hidden=v!=="chat";$("profilepane").hidden=v!=="profile";$("askbar").hidden=!token||v!=="chat"}
+const initials=n=>(n||"?").split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0].toUpperCase()).join("")||"?";
+function setAvatar(url,name){for(const el of [$("avatarbtn"),$("pavatar")])el.innerHTML=url?`<img alt="" src="${url}">`:esc(initials(name))}
+async function loadAvatar(){
+  const name=prof.full_name||prof.username;
+  if(!prof.has_avatar){setAvatar(null,name);return}
+  const r=await fetch("/api/profile/avatar",{headers:auth()});
+  setAvatar(r.ok?URL.createObjectURL(await r.blob()):null,name);
+}
+async function loadProfile(){prof=await call("GET","/api/profile");await loadAvatar();renderProfile()}
+function renderProfile(){
+  $("ptitle").textContent=prof.full_name||prof.username;
+  $("psub").textContent=[prof.role,prof.department,prof.semester?`Semester ${prof.semester}`:""].filter(Boolean).join(" · ");
+  $("pview").innerHTML=[...PF.map(f=>[f.l,prof[f.k]]),...RO.map(([k,l])=>[l,prof[k]])].map(([l,v])=>`<div><dt>${esc(l)}</dt><dd>${v?esc(v):'<span class="muted">Not set</span>'}</dd></div>`).join("");
+  $("pfields").innerHTML=PF.map(f=>{
+    const id="pf_"+f.k,v=prof[f.k]??"";
+    const ctl=f.t==="select"?`<select id="${id}"><option value="">Not set</option>${(f.k==="department"?prof.choices.departments:prof.choices.semesters).map(o=>`<option ${String(o)===String(v)?"selected":""}>${esc(o)}</option>`).join("")}</select>`
+      :f.t==="textarea"?`<textarea id="${id}" rows="3" maxlength="${f.max}">${esc(v)}</textarea>`
+      :`<input id="${id}" type="${f.t}" maxlength="${f.max}" value="${esc(v)}"${f.k==="phone"?' inputmode="tel" autocomplete="tel"':""}>`;
+    return `<div class="field${f.t==="textarea"?" wide":""}"><label for="${id}">${f.l}</label>${ctl}${f.hint?`<div class="hintline">${f.hint}</div>`:""}<div class="ferr" id="${id}_e" role="alert"></div></div>`;
+  }).join("")+RO.map(([k,l])=>`<div class="field"><label for="pr_${k}">${l} <span role="img" title="Managed by your administrator" aria-label="read-only">${LOCK}</span></label><input id="pr_${k}" value="${esc(prof[k]||"")}" disabled></div>`).join("");
+  for(const f of PF){const el=$("pf_"+f.k);el.addEventListener("input",()=>check());el.addEventListener("blur",()=>check());el.addEventListener("change",()=>check())}
+  setEditing(false);
+}
+const vals=()=>Object.fromEntries(PF.map(f=>[f.k,$("pf_"+f.k).value.trim()]));
+function check(show=true){
+  if(!prof||!$("pf_full_name"))return{bad:null,dirty:false,cur:{}};
+  const cur=vals();let bad=null;
+  for(const f of PF){const m=(V[f.k]||(()=>""))(cur[f.k]);if(show){$("pf_"+f.k+"_e").textContent=m;$("pf_"+f.k).setAttribute("aria-invalid",String(!!m))}if(m&&!bad)bad=f.k}
+  const dirty=PF.some(f=>String(cur[f.k])!==String(prof[f.k]??""));$("psave").disabled=!dirty||!!bad;return{bad,dirty,cur};
+}
+function setEditing(on){editing=on;$("pview").hidden=on;$("pform").hidden=!on;$("pedit").hidden=on;if(on){$("pf_full_name").focus();check(false)}}
+const leave=()=>!(editing&&check(false).dirty)||confirm("You have unsaved changes. Discard them?");
+$("avatarbtn").onclick=()=>{showView("profile");$("pview").innerHTML='<div class="skel"></div><div class="skel"></div><div class="skel"></div>';loadProfile().catch(err=>toast(err.message,"err"))};
+$("pback").onclick=()=>{if(leave()){setEditing(false);showView("chat")}};
+$("pedit").onclick=()=>setEditing(true);
+$("pcancel").onclick=()=>{if(leave())renderProfile()};
+window.addEventListener("beforeunload",e=>{if(editing&&check(false).dirty){e.preventDefault();e.returnValue=""}});
+$("pform").onsubmit=async e=>{
+  e.preventDefault();
+  const {bad,cur}=check();if(bad){$("pf_"+bad).focus();return}
+  const body={};
+  for(const f of PF)if(String(cur[f.k])!==String(prof[f.k]??""))body[f.k]=cur[f.k]===""?null:(f.k==="semester"?+cur[f.k]:cur[f.k]);
+  $("psave").disabled=true;$("psave").textContent="Saving…";
+  try{prof=await call("PATCH","/api/profile",body);await loadAvatar();renderProfile();toast("Profile saved","ok")}
+  catch(err){
+    for(const [k,m] of Object.entries(err.fields||{}))if($("pf_"+k+"_e")){$("pf_"+k+"_e").textContent=m;$("pf_"+k).setAttribute("aria-invalid","true")}
+    toast(err.message,"err");const first=Object.keys(err.fields||{})[0];if(first&&$("pf_"+first))$("pf_"+first).focus();
+  }
+  $("psave").textContent="Save changes";check(false);
+};
+$("pfile").onchange=async()=>{
+  const f=$("pfile").files[0];if(!f)return;
+  const bmp=await createImageBitmap(f).catch(()=>null);
+  if(!bmp){toast("That file is not a readable image.","err");$("pfile").value="";return}
+  const s=Math.min(bmp.width,bmp.height),c=document.createElement("canvas");c.width=c.height=512;
+  c.getContext("2d").drawImage(bmp,(bmp.width-s)/2,(bmp.height-s)/2,s,s,0,0,512,512);
+  pendingPhoto=await new Promise(r=>c.toBlob(r,"image/jpeg",.9));
+  $("pavatar").innerHTML=`<img alt="Preview of your new photo" src="${URL.createObjectURL(pendingPhoto)}">`;$("photosave").hidden=false;
+};
+$("photosave").onclick=async()=>{
+  const fd=new FormData();fd.append("file",pendingPhoto,"avatar.jpg");
+  const r=await fetch("/api/profile/avatar",{method:"POST",headers:auth(),body:fd});
+  if(!r.ok){const j=await r.json().catch(()=>({}));toast(j.detail||"Upload failed.","err");return}
+  $("photosave").hidden=true;$("pfile").value="";pendingPhoto=null;prof.has_avatar=true;await loadAvatar();toast("Photo updated","ok");
+};
+$("photodel").onclick=async()=>{try{await call("DELETE","/api/profile/avatar");prof.has_avatar=false;await loadAvatar();toast("Photo removed","ok")}catch(err){toast(err.message,"err")}};
+$("themebtn").onclick=()=>{const t=document.documentElement.dataset.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=t;localStorage.theme=t};
+const hash=location.hash;
+if(hash.startsWith("#reset="))show("reset");
+else if(hash.startsWith("#sso=")){const t=hash.slice(5);history.replaceState(null,"",location.pathname);call("POST","/api/sso/exchange",{token:t}).then(enter).catch(err=>{$("lerr").textContent=err.message})}
+else if(hash.startsWith("#verify=")){const t=hash.slice(8);history.replaceState(null,"",location.pathname);call("POST","/api/verify-email",{token:t}).then(()=>say("lerr","Email verified. You can sign in.","ok")).catch(err=>{$("lerr").textContent=err.message})}
+else if(hash.startsWith("#sso_error")){history.replaceState(null,"",location.pathname);$("lerr").textContent="SSO sign-in failed. Ask an admin for access."}
+fetch("/api/config").then(r=>r.json()).then(c=>{$("ssobtn").hidden=!c.sso}).catch(()=>{});
+$("ssobtn").onclick=()=>{location.href="/api/sso/login"};
+$("emailform").onsubmit=async e=>{e.preventDefault();try{await call("POST","/api/me/email",{email:$("me_email").value.trim()});$("emailform").reset();await loadAcct()}catch(err){say("acctinfo",err.message,"err")}};
+$("tfa").onclick=async e=>{
+  try{
+    if(e.target.id==="tsetup"){
+      const j=await call("POST","/api/2fa/setup");
+      $("tfa").innerHTML=`<p>In your authenticator app (Google Authenticator, Authy, 1Password) choose "enter a setup key" and type:</p><p><code>${esc(j.secret)}</code></p><p class="muted" style="word-break:break-all">${esc(j.uri)}</p><div class="row"><input id="te_code" inputmode="numeric" placeholder="6-digit code" aria-label="Code"><button type="button" id="tenable">Turn on</button></div>`;
+    }else if(e.target.id==="tenable"){await call("POST","/api/2fa/enable",{code:$("te_code").value.trim()});say("tmsg","Two-factor is on.","ok");loadAcct()}
+    else if(e.target.id==="tdisable"){await call("POST","/api/2fa/disable",{password:$("td_pw").value,code:$("td_code").value.trim()});say("tmsg","Two-factor is off.","ok");loadAcct()}
+  }catch(err){say("tmsg",err.message,"err")}
+};
+$("log").onclick=async e=>{
+  const b=e.target.closest("button[data-open]");if(!b)return;
+  const w=window.open("about:blank","_blank");
+  try{
+    const r=await fetch(`/api/files/${encodeURIComponent(b.dataset.tag)}/${encodeURIComponent(b.dataset.file)}`,{headers:auth()});
+    if(!r.ok)throw new Error("That document is no longer available.");
+    w.location.href=URL.createObjectURL(await r.blob());
+  }catch(err){if(w)w.close();b.insertAdjacentHTML("afterend",`<span class="err"> ${esc(err.message)}</span>`)}
+};
+$("bknow").onclick=async()=>{try{const j=await call("POST","/api/backup");say("amsg",j.offsite===false?`Created ${j.name}, but the off-site upload failed: ${j.offsite_error}`:`Created ${j.name}${j.offsite?" and copied off-site":" (off-site upload is not configured)"}.`,j.offsite===false?"err":"ok");refreshAdmin()}catch(err){say("amsg",err.message,"err")}};
+$("backups").onclick=async e=>{
+  const b=e.target.closest("button[data-bk]");if(!b)return;
+  const r=await fetch("/api/backups/"+encodeURIComponent(b.dataset.bk),{headers:auth()});
+  if(!r.ok)return say("amsg","Download failed.","err");
+  const a=document.createElement("a");a.href=URL.createObjectURL(await r.blob());a.download=b.dataset.bk;a.click();
+};
+$("auditgo").onclick=()=>loadAudit().catch(err=>say("amsg",err.message,"err"));
+$("auditmore").onclick=()=>loadAudit(true).catch(err=>say("amsg",err.message,"err"));
+$("askbar").onsubmit=async e=>{
+  e.preventDefault();
+  const q=$("q").value.trim();if(!q)return;
+  $("q").value="";$("send").disabled=true;
+  const {a,box}=addMsg(q);a.textContent="Searching…";let text="",isNew=!chatId;
+  const on=ev=>{
+    if(ev.type==="chat")chatId=ev.id;
+    else if(ev.type==="sources")showSources(box,ev.sources);
+    else if(ev.type==="token"){text+=ev.text;a.textContent=text}
+    else if(ev.type==="error")throw new Error(ev.message);
+    else if(ev.type==="done")box.insertAdjacentHTML("beforeend",`<div class="hint">${ev.ms} ms</div>`);
+  };
+  try{
+    const r=await fetch("/api/ask",{method:"POST",headers:{"Content-Type":"application/json",...auth()},body:JSON.stringify({question:q,chat_id:chatId})});
+    if(!r.ok){const j=await r.json().catch(()=>({}));throw new Error(typeof j.detail==="string"?j.detail:"Something went wrong.")}
+    const rd=r.body.getReader(),dec=new TextDecoder();let buf="";
+    for(;;){
+      const {done,value}=await rd.read();if(done)break;
+      buf+=dec.decode(value,{stream:true});
+      let i;while((i=buf.indexOf("\n"))>=0){const l=buf.slice(0,i);buf=buf.slice(i+1);if(l)on(JSON.parse(l))}
+      box.scrollIntoView({block:"end"});
+    }
+    if(isNew)loadChats();
+  }catch(err){a.innerHTML=`<span class="err">${esc(err.message)}</span>`}
+  $("send").disabled=false;$("q").focus();
+};
+</script>
+</body>
+</html>
